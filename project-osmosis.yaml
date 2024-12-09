@@ -29,11 +29,10 @@ network:
       messages:
         - Coin
   endpoint:
-    - https://osmosis-rpc.publicnode.com/
-    # - https://osmosis-rpc.polkachu.com/
+    - https://rpc.osmosis.zone/
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 17154300
+    startBlock: 25390600
     mapping:
       file: ./dist/index.js
       handlers:

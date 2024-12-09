@@ -18,8 +18,11 @@ type UserBond @entity{
   ts: BigInt!
 }
 
-type PoolPosition @entity{
+type PoolPosition @entity {
   id: ID!
-  created: Date!
-  height: BigInt!
+  poolId: String! @index
+  height: BigInt! @index
+  createdAt: Date!
+  closedAt: Date
+  closedHeight: BigInt @index
 }

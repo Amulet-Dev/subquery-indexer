@@ -43,60 +43,60 @@ services:
       interval: 3s
       timeout: 5s
       retries: 10
-  subquery-node-secret:
-    image: subquerynetwork/subql-node-cosmos:latest
-    depends_on:
-      "postgres":
-        condition: service_healthy
-    restart: always
-    environment:
-      DB_USER: postgres
-      DB_PASS: postgres
-      DB_DATABASE: postgres
-      DB_HOST: postgres
-      DB_PORT: 5432
-    volumes:
-      - ./:/app
-    command:
-      - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
-      - -f=/app/project-secret.yaml
-      - --multi-chain
-      - --db-schema=multi-transfers
-      - --disable-historical
-      - --batch-size=30
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://subquery-node-secret:3000/ready"]
-      interval: 3s
-      timeout: 5s
-      retries: 10
+  # subquery-node-secret:
+  #   image: subquerynetwork/subql-node-cosmos:latest
+  #   depends_on:
+  #     "postgres":
+  #       condition: service_healthy
+  #   restart: always
+  #   environment:
+  #     DB_USER: postgres
+  #     DB_PASS: postgres
+  #     DB_DATABASE: postgres
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #   volumes:
+  #     - ./:/app
+  #   command:
+  #     - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
+  #     - -f=/app/project-secret.yaml
+  #     - --multi-chain
+  #     - --db-schema=multi-transfers
+  #     - --disable-historical
+  #     - --batch-size=30
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://subquery-node-secret:3000/ready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
 
-  subquery-node-neutron:
-    image: subquerynetwork/subql-node-cosmos:latest
-    depends_on:
-      "postgres":
-        condition: service_healthy
-    restart: always
-    environment:
-      DB_USER: postgres
-      DB_PASS: postgres
-      DB_DATABASE: postgres
-      DB_HOST: postgres
-      DB_PORT: 5432
-    volumes:
-      - ./:/app
-    command:
-      - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
-      - -f=/app/project-neutron-exec.yaml
-      - --multi-chain
-      - --db-schema=multi-transfers
-      - --disable-historical
-      - --batch-size=30
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://subquery-node-neutron:3000/ready"]
-      interval: 3s
-      timeout: 5s
-      retries: 10
-
+  # subquery-node-neutron:
+  #   image: subquerynetwork/subql-node-cosmos:latest
+  #   depends_on:
+  #     "postgres":
+  #       condition: service_healthy
+  #   restart: always
+  #   environment:
+  #     DB_USER: postgres
+  #     DB_PASS: postgres
+  #     DB_DATABASE: postgres
+  #     DB_HOST: postgres
+  #     DB_PORT: 5432
+  #   volumes:
+  #     - ./:/app
+  #   command:
+  #     - ${SUB_COMMAND:-} # set SUB_COMMAND env variable to "test" to run tests
+  #     - -f=/app/project-neutron-exec.yaml
+  #     - --multi-chain
+  #     - --db-schema=multi-transfers
+  #     - --disable-historical
+  #     - --batch-size=30
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://subquery-node-neutron:3000/ready"]
+  #     interval: 3s
+  #     timeout: 5s
+  #     retries: 10
+  #
   graphql-engine:
     image: onfinality/subql-query:latest
     ports:
@@ -106,10 +106,10 @@ services:
         condition: service_healthy
       # "subquery-node-secret":
       #   condition: service_healthy
-      # "subquery-node-osmosis":
-      #   condition: service_healthy
-      "subquery-node-neutron":
+      "subquery-node-osmosis":
         condition: service_healthy
+      # "subquery-node-neutron":
+        # condition: service_healthy
     restart: always
     environment:
       DB_USER: postgres

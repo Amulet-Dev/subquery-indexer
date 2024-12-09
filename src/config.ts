@@ -1,11 +1,6 @@
-
-
-export const config ={ 
-  'osmosis-1': {
-    denoms: ['ibc/0FC38457AF15A8BD1962BB97DDF1AB5EF4C74C5BFDAEF00289A9C405CBD609B0'],
-    poolId: '1464'
-  },
-  'secret-4': {
-    denoms: ['ibc/4F8BBC6C7C8E18B4BA9F4FF27918CD54B42F95D1B69EBFA73FB075C46BD2D0E9']
-  }
+export const config = {
+    "osmosis-1": {
+        denoms: [""],
+        poolIds: [""],
+    },
 };
