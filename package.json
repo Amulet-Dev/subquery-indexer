@@ -9,7 +9,10 @@
     "start:docker": "docker-compose pull && docker-compose up --remove-orphans",
     "dev": "subql codegen && subql build && docker-compose pull && docker-compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
-    "test": "jest"
+    "test": "jest",
+    "start:prod": "docker-compose pull && docker-compose up -d --remove-orphans",
+    "stop:prod": "docker-compose down",
+    "rebuild:prod": "yarn stop:prod && && yarn codegen && yarn build && yarn start:prod"
   },
   "homepage": "https://github.com/subquery/cosmos-subql-starter",
   "repository": "github:subquery/cosmos-subql-starter",
