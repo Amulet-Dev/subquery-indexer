@@ -26,3 +26,18 @@ type PoolPosition @entity {
   closedAt: Date
   closedHeight: BigInt @index
 }
+
+type FungifyChargedPositions @entity {
+  id: ID!
+  positionIds: [BigInt!]!
+  sender: String!
+  blockHeight: BigInt!     
+  timestamp: Date!
+}
+
+type FungifyChargedPositionsResponse @entity {
+  id: ID!
+  newPositionId: BigInt!
+  blockHeight: BigInt!
+  timestamp: Date!
+}

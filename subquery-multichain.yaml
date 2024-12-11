@@ -4,4 +4,3 @@ query:
   version: '*'
 projects:
   - project-osmosis.yaml
-  - project-secret.yaml

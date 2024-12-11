@@ -3,7 +3,13 @@ import {
     CosmosMessage,
     CosmosTransaction,
 } from "@subql/types-cosmos";
-import { PoolPosition, UserBalance, UserBond } from "../types";
+import {
+    FungifyChargedPositions,
+    FungifyChargedPositionsResponse,
+    PoolPosition,
+    UserBalance,
+    UserBond,
+} from "../types";
 import { config } from "../config";
 
 type BondExecuteMessageType = {
@@ -134,7 +140,7 @@ export async function handleCreatePosition(input: CosmosEvent): Promise<void> {
         height: BigInt(input.block.header.height),
         createdAt: new Date(input.block.header.time.getTime()),
     }).save();
-    logger.info("Position %s added", id);
+    logger.info("HANDLE_CREATE_POSITION: Position %s added", id);
 }
 
 export async function handleRemovePosition(input: CosmosEvent): Promise<void> {
@@ -161,8 +167,76 @@ export async function handleRemovePosition(input: CosmosEvent): Promise<void> {
         position.closedAt = new Date(input.block.header.time.getTime());
         position.closedHeight = BigInt(input.block.header.height);
         await position.save();
-        logger.info("Position %s closed at height %s", id, position.closedHeight);
+        logger.info(
+            "HANDLE_REMOVE_POSITION: Position %s closed at height %s",
+            id,
+            position.closedHeight
+        );
     } else {
-        logger.warn("Position %s not found when trying to close it", id);
+        logger.warn(
+            "HANDLE_REMOVE_POSITION: Position %s not found when trying to close it",
+            id
+        );
+    }
+}
+
+export async function handleFungifyPositions(
+    input: CosmosEvent
+): Promise<void> {
+    try {
+        logger.info("HANDLE_FUNGIFY_POSITIONS: Fired...");
+        // Extract attributes from the event
+        const attributes = input.event.attributes.reduce(
+            (acc: any, { key, value }: any) => {
+                acc[key] = value;
+                return acc;
+            },
+            {}
+        );
+
+        const positionIdsStr = attributes.position_ids; // Assuming 'position_ids' is the key
+        const newPositionIdStr = attributes.new_position_id; // Assuming 'new_position_id' is the key
+
+        if (!positionIdsStr || !newPositionIdStr) {
+            logger.warn("Fungify event missing position_ids or new_position_id");
+            return;
+        }
+
+        // Parse position IDs
+        const positionIds: number[] = positionIdsStr.split(","); // Adjust based on how position IDs are serialized
+
+        const newPositionId = newPositionIdStr;
+
+        // Fetch and delete old positions
+        for (const posId of positionIds) {
+            const posIdStr = posId.toString();
+            const oldPosition = await PoolPosition.get(posIdStr);
+            if (oldPosition) {
+                await PoolPosition.remove(posIdStr);
+                logger.info(`Removed old position with ID: ${posId}`);
+            } else {
+                logger.warn(`Old position with ID: ${posId} not found`);
+            }
+        }
+
+        // Fetch data from one of the old positions to populate the new position
+        // Assuming all old positions have the same poolId and tick ranges
+        const sampleOldPosition = await PoolPosition.get(positionIds[0].toString());
+        if (!sampleOldPosition) {
+            logger.warn(`Sample old position with ID: ${positionIds[0]} not found`);
+            return;
+        }
+
+        // Create the new position
+        await PoolPosition.create({
+            id: sampleOldPosition.poolId + "_" + newPositionId,
+            poolId: sampleOldPosition.poolId,
+            height: BigInt(input.block.header.height),
+            createdAt: new Date(input.block.header.time.getTime()),
+        }).save();
+
+        logger.info(`Created new fungified position with ID: ${newPositionId}`);
+    } catch (error) {
+        logger.error(`Error handling fungify positions: ${error}`);
     }
 }

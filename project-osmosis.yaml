@@ -20,6 +20,7 @@ network:
         - MsgWithdrawPosition
         - MsgCreatePosition
         - MsgAddToPosition
+        - MsgFungifyChargedPositions
     osmosis.superfluid:
       file: ./proto/osmosis/superfluid/tx.proto
       messages:
@@ -32,7 +33,7 @@ network:
     - https://rpc.osmosis.zone/
 dataSources:
   - kind: cosmos/Runtime
-    startBlock: 25390600
+    startBlock:  25437530
     mapping:
       file: ./dist/index.js
       handlers:
@@ -48,5 +49,11 @@ dataSources:
           kind: cosmos/EventHandler
           filter:
             type: withdraw_position
+            attributes:
+              module: concentratedliquidity
+        - handler: handleFungifyPositions
+          kind: cosmos/EventHandler
+          filter:
+            type: fungify_charged_position
             attributes:
               module: concentratedliquidity
