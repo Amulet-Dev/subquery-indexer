@@ -1,32 +1,32 @@
-specVersion: 1.0.0
-version: 0.0.1
-name: drop-points
-description: Drop points address kyc
-runner:
-  node:
-    name: '@subql/node-cosmos'
-    version: '>=3.0.0'
-  query:
-    name: '@subql/query'
-    version: '*'
-schema:
-  file: ./schema.graphql
-network:
-  chainId: pion-1
-  endpoint:
-    - https://rpc-lb-pion.ntrn.tech"
-    - https://rpc-falcron.pion-1.ntrn.tech
-dataSources:
-  - kind: cosmos/Runtime
-    startBlock: 15450000
-    mapping:
-      file: ./dist/index.js
-      handlers:
-        - handler: handleBondExecution
-          kind: cosmos/MessageHandler
-          filter:
-            type: /cosmwasm.wasm.v1.MsgExecuteContract
-            includeFailedTx: true
-            contractCall: bond
-            values:
-              contract: 'neutron1frz8scdmukvp399kvpldtwvqjd3pyalym5qpfvyxm0dry27r5s6q6f36sc'
+# specVersion: 1.0.0
+# version: 0.0.1
+# name: drop-points
+# description: Drop points address kyc
+# runner:
+#   node:
+#     name: '@subql/node-cosmos'
+#     version: '>=3.0.0'
+#   query:
+#     name: '@subql/query'
+#     version: '*'
+# schema:
+#   file: ./schema.graphql
+# network:
+#   chainId: pion-1
+#   endpoint:
+#     - https://rpc-lb-pion.ntrn.tech"
+#     - https://rpc-falcron.pion-1.ntrn.tech
+# dataSources:
+#   - kind: cosmos/Runtime
+#     startBlock: 15450000
+#     mapping:
+#       file: ./dist/index.js
+#       handlers:
+#         - handler: handleBondExecution
+#           kind: cosmos/MessageHandler
+#           filter:
+#             type: /cosmwasm.wasm.v1.MsgExecuteContract
+#             includeFailedTx: true
+#             contractCall: bond
+#             values:
+#               contract: 'neutron1frz8scdmukvp399kvpldtwvqjd3pyalym5qpfvyxm0dry27r5s6q6f36sc'

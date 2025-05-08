@@ -1,6 +1,6 @@
 export const config = {
     "osmosis-1": {
-        denoms: [""],
-        poolIds: [""],
+        denoms: ["uosmo"],
+        poolIds: ["1464", "1135"],
     },
 };

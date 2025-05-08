@@ -1,7 +1,7 @@
 specVersion: 1.0.0
 version: 0.0.1
-name: drop-points
-description: Drop points
+name: ingot-indexer
+description: Indexer for Amulet's ingot reward program 
 runner:
   node:
     name: '@subql/node-cosmos'
@@ -21,14 +21,6 @@ network:
         - MsgCreatePosition
         - MsgAddToPosition
         - MsgFungifyChargedPositions
-    osmosis.superfluid:
-      file: ./proto/osmosis/superfluid/tx.proto
-      messages:
-        - MsgCreateFullRangePositionAndSuperfluidDelegate
-    cosmos.base.v1beta1:
-      file: ./proto/cosmos/base/v1beta1/coin.proto
-      messages:
-        - Coin
   endpoint:
     - https://rpc.osmosis.zone/
 dataSources:
@@ -37,8 +29,6 @@ dataSources:
     mapping:
       file: ./dist/index.js
       handlers:
-        - handler: handleCoin
-          kind: cosmos/TransactionHandler
         - handler: handleCreatePosition
           kind: cosmos/EventHandler
           filter:
