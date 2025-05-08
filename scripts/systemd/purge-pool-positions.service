@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily prune of pool_positions
+Wants=network-online.target docker.service
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/alex/dev/amulet/drop-points-subquery/scripts
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/bin/bash /home/alex/dev/amulet/drop-points-subquery/scripts/prune_postgres.sh
+User=alex

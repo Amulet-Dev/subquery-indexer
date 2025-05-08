@@ -1,12 +1,47 @@
-FROM postgres:16-alpine
+# docker/pg-Dockerfile
+# Switch to Debian-based Postgres to enable apt
+FROM postgres:17
 
 # Variables needed at runtime to configure postgres and run the initdb scripts
 ENV POSTGRES_DB 'postgres'
 ENV POSTGRES_USER 'postgres'
 ENV POSTGRES_PASSWORD 'postgres'
 
-# Copy in the load-extensions script
+# Install build tools and Postgres dev headers, clone & build pg_repack
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+       pgxnclient \
+       ca-certificates \
+       zlib1g-dev \
+       libreadline-dev \
+       libssl-dev \
+       liblz4-dev \
+       libzstd-dev \
+       build-essential \
+       git \
+       postgresql-server-dev-all \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN pgxn install pg_repack
+
+RUN ln -s /usr/lib/postgresql/17/bin/pg_repack /usr/local/bin/pg_repack
+
+RUN echo "=== PATH ===" \
+ && echo $PATH \
+ && echo "=== /usr/lib/postgresql directories ===" \
+ && ls -R /usr/lib/postgresql \
+ && echo "=== find pg_repack binary ===" \
+ && find / -type f -name pg_repack* -exec ls -lh {} \; || true
+
+RUN command -v pg_repack && pg_repack --version || echo "pg_repack not found in PATH"
+
+# Copy extension loader script (already exists) to enable pg_repack on init
 COPY docker/load-extensions.sh /docker-entrypoint-initdb.d/
 
-# Convert line endings to LF
-RUN sed -i 's/\r$//' /docker-entrypoint-initdb.d/load-extensions.sh && chmod +x /docker-entrypoint-initdb.d/load-extensions.sh
+# (Optional) clean up build deps to slim image
+RUN apt-get purge -y --auto-remove \
+       build-essential \
+       git \
+       postgresql-server-dev-all \
+ && rm -rf /usr/src/* /var/lib/apt/lists/*
+
