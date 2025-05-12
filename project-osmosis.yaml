@@ -25,7 +25,7 @@ network:
     - https://rpc.osmosis.zone/
 dataSources:
   - kind: cosmos/Runtime
-    startBlock:  25437530
+    startBlock:  35481400
     mapping:
       file: ./dist/index.js
       handlers:
