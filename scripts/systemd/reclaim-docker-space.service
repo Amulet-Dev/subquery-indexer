@@ -6,5 +6,5 @@ After=docker.service
 [Service]
 Type=oneshot
 Environment=PATH=/usr/local/bin:/usr/bin:/bin
-ExecStart=/bin/bash /home/alex/dev/amulet/drop-points-subquery/scripts/reclaim_docker_space.sh
+ExecStart=/bin/bash /opt/subquery/scripts/reclaim_docker_space.sh
 User=alex
