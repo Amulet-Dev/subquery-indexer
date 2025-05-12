@@ -7,7 +7,7 @@ SERVICE="${SERVICE:-postgres}"
 DB_USER="${DB_USER:-postgres}"
 DB_NAME="${DB_NAME:-postgres}"
 SCHEMA="${SCHEMA:-multi-transfers}"
-RETENTION_DAYS="${RETENTION_DAYS:-12}"
+RETENTION_DAYS="${RETENTION_DAYS:-5}"
 LOG_FILE="${LOG_FILE:-$HOME/purge-pool-positions.log}"
 
 timestamp() { date '+%Y-%m-%d %H:%M:%S'; }
